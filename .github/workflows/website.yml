@@ -1,0 +1,54 @@
+name: Website bijwerken
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 5-21/2 * * *"   # elke 2 uur tussen 6u en 22u (Belgische tijd ongeveer)
+  workflow_dispatch: {}          # knop "Run workflow" om meteen bij te werken
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - name: Bestanden klaarzetten
+        run: |
+          mkdir -p assets
+          for f in style.css favicon.svg geen-foto.svg hero.jpg; do [ -f "$f" ] && cp "$f" assets/ || true; done
+      - uses: actions/cache@v4
+        with:
+          path: .fotocache
+          key: fotos-${{ github.run_id }}
+          restore-keys: fotos-
+      - name: Website bouwen uit de Google Sheet
+        env:
+          SHEET_CSV_URL: ${{ vars.SHEET_CSV_URL }}
+          DOWNLOAD_PHOTOS: "1"
+        run: python build.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
