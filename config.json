@@ -1,0 +1,22 @@
+{
+  "site_url": "https://www.bossu-motors.be",
+  "sheet_csv_url": "",
+  "name": "Bossu Motors",
+  "street": "Roeselarestraat 44",
+  "postal": "8610",
+  "city": "Zarren",
+  "phone": "0498 48 23 12",
+  "phone_intl": "+32498482312",
+  "whatsapp": "32498482312",
+  "email": "",
+  "vat_number": "BTW BE 0847.703.289",
+  "lat": "",
+  "lng": "",
+  "hours_text": {
+    "nl": ["Bezoek op afspraak", "Bel of WhatsApp: 0498 48 23 12"],
+    "fr": ["Visite sur rendez-vous", "Appel ou WhatsApp : 0498 48 23 12"]
+  },
+  "opening_hours_schema": [],
+  "same_as": [],
+  "google_site_verification_file": ""
+}
